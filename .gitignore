@@ -1,0 +1,10 @@
+#Python's stuff
+env/
+__pycache__/
+*.pyc
+
+#VSCode
+.vscode/
+
+#DB file
+*.db
