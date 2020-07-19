@@ -17,4 +17,4 @@ class WorkingDay(db.Model):
         'Store', secondary=store_workingday, back_populates='workingdays')
 
     def __repr__(self):
-        return '<WorkingDay day: {}, starts_at: {}, finishes_at:{}>'.format(self.day, self.starts_at, self.finishes_at)
+        return '<WorkingDay {} - {} - {}>'.format(self.day, self.starts_at, self.finishes_at)

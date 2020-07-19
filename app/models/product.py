@@ -12,6 +12,7 @@ class Product(db.Model):
     categories = db.relationship(
         'Category', secondary=category_product, back_populates='products')
     stores = db.relationship('ProductStoreLink', back_populates='product')
+    vouchers = db.relationship('ProductVoucherLink', back_populates='product')
 
     def __repr__(self):
         return '<Product {}>'.format(self.name)

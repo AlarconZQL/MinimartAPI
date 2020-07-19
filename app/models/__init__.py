@@ -4,3 +4,6 @@ from .category import Category
 from .store import Store
 from .product_store import ProductStoreLink
 from .workingday import WorkingDay
+from .voucher import Voucher
+from .product_voucher import ProductVoucherLink
+from .voucherday import VoucherDay

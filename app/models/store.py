@@ -12,6 +12,7 @@ class Store(db.Model):
     products = db.relationship('ProductStoreLink', back_populates='store')
     workingdays = db.relationship(
         'WorkingDay', secondary=store_workingday, back_populates='stores')
+    vouchers = db.relationship('Voucher', back_populates='store')
 
     def __repr__(self):
         return '<Store {}>'.format(self.name)
