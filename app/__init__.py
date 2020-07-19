@@ -1,5 +1,6 @@
 from flask import Flask
-from .extensions import db
+from .extensions import db, ma
+from .apis import api
 
 
 def create_app():
@@ -10,6 +11,9 @@ def create_app():
 
     """Initialize plugins"""
     db.init_app(app)
+    ma.init_app(app)
+    api.init_app(app)
+
     with app.app_context():
         from .models import Product, Category, Store, WorkingDay, Voucher, VoucherDay
         from .models import ProductStoreLink, ProductVoucherLink
