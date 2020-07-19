@@ -11,6 +11,6 @@ def create_app():
     """Initialize plugins"""
     db.init_app(app)
     with app.app_context():
-        from .models import Product, Category
+        from .models import Product, Category, Store, ProductStoreLink
         db.create_all()
         return app
