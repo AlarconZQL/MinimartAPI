@@ -1,5 +1,7 @@
 from flask_restx import Namespace, Resource
 
+from ..utils.seed_database import seed_database
+
 api = Namespace('setup', description='System\'s setup operations')
 
 
@@ -9,5 +11,5 @@ class Setup(Resource):
     def get(self):
         '''Create initial database information'''
         # CREATE THE INFO HERE!
-        print("Creating initial database info")
+        seed_database()
         return 201

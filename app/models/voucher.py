@@ -8,7 +8,7 @@ class Voucher(db.Model):
     code = db.Column(db.String(16), nullable=False, unique=True)
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
-    store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=False)
+    store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
     only_on_days = db.relationship('VoucherDay', back_populates='voucher')
     store = db.relationship('Store', back_populates='vouchers')
     products = db.relationship('ProductVoucherLink', back_populates='voucher')
