@@ -1,143 +1,50 @@
 from random import randint
 from datetime import time, date
+from flask import current_app as app
 from ..models import *
 from . import Days
-
-# STORES
-coco_downtown = Store(
-    name='COCO Downtown', address='Fake address number 1', logo_url='http://fakeimage1')
-coco_bay = Store(
-    name='COCO Bay', address='Fake address number 2', logo_url='http://fakeimage2')
-coco_mall = Store(
-    name='COCO Mall', address='Fake address number 3', logo_url='http://fakeimage3')
 
 
 def seed_database():
 
-    print('Droping all database tables...')
+    app.logger.info('Droping all database tables...')
     db.drop_all()
-    print('All tables were deleted!')
+    app.logger.info('All tables were deleted!')
 
-    print('Creating all database tables...')
+    app.logger.info('Creating all database tables...')
     db.create_all()
-    print('All tables were created!')
+    app.logger.info('All tables were created!')
 
-    print('Creating and setting stores working days...')
-    create_and_set_store_working_days()
+    app.logger.info('Creating stores...')
+    stores = create_stores()
 
-    print('Creating categories...')
+    app.logger.info('Creating and setting stores working days...')
+    create_and_set_store_working_days(stores)
+
+    app.logger.info('Creating categories...')
     categories = create_categories()
 
-    print('Creating products...')
+    app.logger.info('Creating products...')
     products = create_products(categories)
 
-    print('Filling stores with products')
-    generate_stock(products)
+    app.logger.info('Filling stores with products...')
+    generate_stock(stores, products)
 
-    # VOUCHERS
-    # COCO Bay
-    voucher_bay_1 = Voucher(code='COCO1V1F8XOG1MZZ',
-                            start_date=date(2020, 7, 27), end_date=date(2020, 8, 13),
-                            only_on_days=[VoucherDay(day=Days.Wednesday),
-                                          VoucherDay(day=Days.Thursday)])
+    app.logger.info('Creating vouchers...')
+    vouchers = create_vouchers()
 
-    voucher_bay_2 = Voucher(code='COCOKCUD0Z9LUKBN',
-                            start_date=date(2020, 7, 24), end_date=date(2020, 8, 6))
+    app.logger.info('Assigning products to vouchers...')
+    assign_products_to_vouchers(products, vouchers)
 
-    # COCO Mall
-    voucher_mall = Voucher(code='COCOG730CNSG8ZVX',
-                           start_date=date(2020, 7, 31), end_date=date(2020, 8, 9))
+    app.logger.info('Assigning vouchers to stores...')
+    assign_vouchers_to_stores(stores, vouchers)
 
-    # COCO Downtown
-    voucher_downtown_1 = Voucher(code='COCO2O1USLC6QR22',
-                                 start_date=date(2020, 8, 1), end_date=date(2020, 8, 31))
-
-    voucher_downtown_2 = Voucher(code='COCO0FLEQ287CC05',
-                                 start_date=date(2020, 7, 1), end_date=date(2020, 7, 15),
-                                 only_on_days=[VoucherDay(day=Days.Monday)])
-
-    # Set voucher's products
-
-    sodas_products = [products['tea'], products['coffee'], products['cola'],
-                      products['sprute'], products['slurm'], products['diet_slurm']]
-
-    food_products = [products['salsa_cookies'], products['windmill_cookies'],
-                     products['garlic_bread'], products['lactel_bread'],
-                     products['raviolchesx12'], products['raviolchesx48'],
-                     products['milanga'], products['milanga_napo']]
-
-    cleaning_products = [products['detergent'],
-                         products['virulanita'], products['sponge'], products['mop']]
-
-    bathroom_products = [products['toilet_paper'],
-                         products['soap'], products['shampoo'], products['toothpaste']]
-
-    vouchers_info = [
-        {
-            "voucher": voucher_bay_1,
-            "products": cleaning_products,
-            "discount": 20,
-            "on_unit": None,
-            "max_units": None,
-        },
-        {
-            "voucher": voucher_bay_2,
-            "products": [products['windmill_cookies']],
-            "discount": 100,
-            "on_unit": 3,
-            "max_units": 6,
-        },
-        {
-            "voucher": voucher_mall,
-            "products": bathroom_products + sodas_products,
-            "discount": 10,
-            "on_unit": None,
-            "max_units": None,
-        },
-        {
-            "voucher": voucher_downtown_1,
-            "products": [products['cola'], products['slurm'], products['diet_slurm']],
-            "discount": 30,
-            "on_unit": 2,
-            "max_units": 2,
-        },
-        {
-            "voucher": voucher_downtown_2,
-            "products": [products['toothpaste']],
-            "discount": 50,
-            "on_unit": 2,
-            "max_units": 2,
-        }
-    ]
-
-    for voucher_info in vouchers_info:
-        for product in voucher_info['products']:
-            voucher_info['voucher'].products.append(
-                ProductVoucherLink(
-                    product=product,
-                    discount=voucher_info['discount'],
-                    on_unit=voucher_info['on_unit'],
-                    max_units=voucher_info['max_units']
-                ))
-
-    stores_voucher = [
-        {'store': coco_bay, 'vouchers': [voucher_bay_1, voucher_bay_2]},
-        {'store': coco_mall, 'vouchers': [voucher_mall]},
-        {'store': coco_downtown, 'vouchers': [
-            voucher_downtown_1, voucher_downtown_2]}
-    ]
-
-    for store in stores_voucher:
-        for voucher in store['vouchers']:
-            store['store'].vouchers.append(voucher)
-
-    # Persist information
-    stores = [coco_bay, coco_downtown, coco_mall]
-    for store in stores:
+    for store in stores.values():
         db.session.add(store)
 
-    print('Persisting information on database...')
+    app.logger.info('Persisting information on database...')
     db.session.commit()
+    app.logger.info('Information persisted successfully!')
 
     return
 
@@ -168,21 +75,21 @@ def create_working_days():
         })
 
 
-def create_and_set_store_working_days():
+def create_and_set_store_working_days(stores):
     working_days = create_working_days()
     stores_working_days_info = [
         {
-            'store': coco_downtown,
+            'store': stores['COCO_DOWNTOWN'],
             'working_days': ['monday_morning', 'tuesday_morning',
                              'wednesday_morning', 'thursday_morning', 'friday_morning']
         },
         {
-            'store': coco_bay,
+            'store': stores['COCO_BAY'],
             'working_days': ['monday_afternoon', 'tuesday_afternoon',
                              'wednesday_afternoon', 'thursday_afternoon', 'friday_afternoon']
         },
         {
-            'store': coco_mall,
+            'store': stores['COCO_MALL'],
             'working_days': ['monday_morning', 'tuesday_afternoon',
                              'wednesday_morning', 'thursday_afternoon']
         }
@@ -242,18 +149,20 @@ def create_products(categories):
     })
 
 
-def generate_stock(products):
+def generate_stock(stores, products):
     coco_bay_no_stock = [products['diet_slurm'], products['toilet_paper'],
                          products['soap'], products['shampoo'], products['toothpaste']]
     coco_mall_no_stock = [products['raviolchesx12'], products['raviolchesx48'],
-                          products['milanga'], products['milanga_napo'], products['detergent'], products['virulanita'], products['sponge'], products['mop']]
+                          products['milanga'], products['milanga_napo'], products['detergent'],
+                          products['virulanita'], products['sponge'], products['mop']]
     coco_downtown_no_stock = [products['sprute'], products['slurm'],
-                              products['detergent'], products['virulanita'], products['sponge'], products['mop'], products['toilet_paper']]
+                              products['detergent'], products['virulanita'], products['sponge'],
+                              products['mop'], products['toilet_paper']]
 
     stores_stock_info = [
-        {'store': coco_bay, 'no_stock': coco_bay_no_stock},
-        {'store': coco_mall, 'no_stock': coco_mall_no_stock},
-        {'store': coco_downtown, 'no_stock': coco_downtown_no_stock}
+        {'store': stores['COCO_BAY'], 'no_stock': coco_bay_no_stock},
+        {'store': stores['COCO_MALL'], 'no_stock': coco_mall_no_stock},
+        {'store': stores['COCO_DOWNTOWN'], 'no_stock': coco_downtown_no_stock}
     ]
 
     # Create product stock for each store
@@ -265,3 +174,115 @@ def generate_stock(products):
             store_info['store'].products.append(
                 ProductStoreLink(stock=stock, product=product))
     return
+
+
+def create_vouchers():
+    return ({
+            'COCO1V1F8XOG1MZZ': Voucher(code='COCO1V1F8XOG1MZZ',
+                                        start_date=date(2020, 7, 27), end_date=date(2020, 8, 13),
+                                        only_on_days=[VoucherDay(day=Days.Wednesday),
+                                                      VoucherDay(day=Days.Thursday)]),
+            'COCOKCUD0Z9LUKBN': Voucher(code='COCOKCUD0Z9LUKBN',
+                                        start_date=date(2020, 7, 24), end_date=date(2020, 8, 6)),
+            'COCOG730CNSG8ZVX': Voucher(code='COCOG730CNSG8ZVX',
+                                        start_date=date(2020, 7, 31), end_date=date(2020, 8, 9)),
+            'COCO2O1USLC6QR22': Voucher(code='COCO2O1USLC6QR22',
+                                        start_date=date(2020, 8, 1), end_date=date(2020, 8, 31)),
+            'COCO0FLEQ287CC05': Voucher(code='COCO0FLEQ287CC05',
+                                        start_date=date(2020, 7, 1), end_date=date(2020, 7, 15),
+                                        only_on_days=[VoucherDay(day=Days.Monday)])
+            })
+
+
+def assign_products_to_vouchers(products, vouchers):
+    # Set voucher's products
+
+    sodas_products = [products['tea'], products['coffee'], products['cola'],
+                      products['sprute'], products['slurm'], products['diet_slurm']]
+
+    food_products = [products['salsa_cookies'], products['windmill_cookies'],
+                     products['garlic_bread'], products['lactel_bread'],
+                     products['raviolchesx12'], products['raviolchesx48'],
+                     products['milanga'], products['milanga_napo']]
+
+    cleaning_products = [products['detergent'],
+                         products['virulanita'], products['sponge'], products['mop']]
+
+    bathroom_products = [products['toilet_paper'],
+                         products['soap'], products['shampoo'], products['toothpaste']]
+
+    vouchers_info = [
+        {
+            "voucher": vouchers['COCO1V1F8XOG1MZZ'],
+            "products": cleaning_products,
+            "discount": 20,
+            "on_unit": None,
+            "max_units": None,
+        },
+        {
+            "voucher": vouchers['COCOKCUD0Z9LUKBN'],
+            "products": [products['windmill_cookies']],
+            "discount": 100,
+            "on_unit": 3,
+            "max_units": 6,
+        },
+        {
+            "voucher": vouchers['COCOG730CNSG8ZVX'],
+            "products": bathroom_products + sodas_products,
+            "discount": 10,
+            "on_unit": None,
+            "max_units": None,
+        },
+        {
+            "voucher": vouchers['COCO2O1USLC6QR22'],
+            "products": [products['cola'], products['slurm'], products['diet_slurm']],
+            "discount": 30,
+            "on_unit": 2,
+            "max_units": 2,
+        },
+        {
+            "voucher": vouchers['COCO0FLEQ287CC05'],
+            "products": [products['toothpaste']],
+            "discount": 50,
+            "on_unit": 2,
+            "max_units": 2,
+        }
+    ]
+
+    for voucher_info in vouchers_info:
+        for product in voucher_info['products']:
+            voucher_info['voucher'].products.append(
+                ProductVoucherLink(
+                    product=product,
+                    discount=voucher_info['discount'],
+                    on_unit=voucher_info['on_unit'],
+                    max_units=voucher_info['max_units']
+                ))
+
+
+def assign_vouchers_to_stores(stores, vouchers):
+    stores_voucher = [
+        {'store': stores['COCO_BAY'], 'vouchers': [
+            vouchers['COCO1V1F8XOG1MZZ'], vouchers['COCOKCUD0Z9LUKBN']]},
+        {'store': stores['COCO_MALL'], 'vouchers': [
+            vouchers['COCOG730CNSG8ZVX']]},
+        {'store': stores['COCO_DOWNTOWN'], 'vouchers': [
+            vouchers['COCO2O1USLC6QR22'], vouchers['COCO0FLEQ287CC05']]}
+    ]
+
+    for store in stores_voucher:
+        for voucher in store['vouchers']:
+            store['store'].vouchers.append(voucher)
+
+
+def create_stores():
+    return (
+        {
+            'COCO_DOWNTOWN': Store(
+                name='COCO Downtown', address='Fake address number 1', logo_url='http://fakeimage1'),
+            'COCO_BAY': Store(
+                name='COCO Bay', address='Fake address number 2', logo_url='http://fakeimage2'),
+            'COCO_MALL': Store(
+                name='COCO Mall', address='Fake address number 3', logo_url='http://fakeimage3')
+        }
+    )
