@@ -1,3 +1,5 @@
+import calendar
+from datetime import date
 from app.models import Store, Product, ProductStoreLink
 
 
@@ -15,3 +17,27 @@ class StoreService:
                 'products': availables
             })
         return result
+
+    @staticmethod
+    def get_stores_opened_today_at(time):
+        print('Received time', time)
+        today_name = calendar.day_name[date.today().weekday()]
+        #print('Today name', today_name)
+        stores = Store.query.all()
+        opened_stores = []
+        for store in stores:
+            print('Store', store.name)
+            today_workindays = list(
+                filter(lambda current: current.day.name == today_name, store.workingdays))
+            print('Today workingdays', today_workindays)
+            for workingday in today_workindays:
+                if workingday.starts_at <= time and time <= workingday.finishes_at:
+                    opened_stores.append(store)
+                    break
+        print('Today (', today_name, ') at', time,
+              'the following stores are opened:', opened_stores)
+        return opened_stores
+
+    @staticmethod
+    def get_all_stores():
+        return Store.query.all()
