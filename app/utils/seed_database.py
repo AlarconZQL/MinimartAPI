@@ -116,36 +116,36 @@ def create_products(categories):
     bathroom = categories['bathroom']
     return ({
         # SODAS
-        'tea': Product(name='Cold Ice Tea', categories=[sodas]),
-        'coffee': Product(name='Coffee flavoured milk', categories=[sodas]),
-        'cola': Product(name='Nuka-Cola', categories=[sodas]),
-        'sprute': Product(name='Sprute', categories=[sodas]),
-        'slurm': Product(name='Slurm', categories=[sodas]),
-        'diet_slurm': Product(name='Diet Slurm', categories=[sodas]),
+        'tea': Product(name='Cold Ice Tea', categories=[sodas], price=10, description="Chinese tea"),
+        'coffee': Product(name='Coffee flavoured milk', categories=[sodas], price=15, description="Colombian coffee"),
+        'cola': Product(name='Nuka-Cola', categories=[sodas], price=20.5, description="Explosive cola"),
+        'sprute': Product(name='Sprute', categories=[sodas], price=18, description="Sprite's young brother"),
+        'slurm': Product(name='Slurm', categories=[sodas], price=12, description="Unknown flavour"),
+        'diet_slurm': Product(name='Diet Slurm', categories=[sodas], price=15, description="Unknown flavour, less calories"),
 
         # FOOD
-        'salsa_cookies': Product(name='Salsa Cookies', categories=[food]),
-        'windmill_cookies': Product(name='Windmill Cookies', categories=[food]),
-        'garlic_bread': Product(name='Garlic-o-bread 2000', categories=[food]),
-        'lactel_bread': Product(name='LACTEL bread', categories=[food]),
-        'raviolchesx12': Product(name='Ravioloches x12', categories=[food]),
-        'raviolchesx48': Product(name='Ravioloches x48', categories=[food]),
-        'milanga': Product(name='Milanga ganga', categories=[food]),
-        'milanga_napo': Product(name='Milanga ganga napo', categories=[food]),
+        'salsa_cookies': Product(name='Salsa Cookies', categories=[food], price=5, description="Chocolate cookies"),
+        'windmill_cookies': Product(name='Windmill Cookies', categories=[food], price=8, description="Vanilla cookies"),
+        'garlic_bread': Product(name='Garlic-o-bread 2000', categories=[food], price=18.5, description="Garlic flavoured bread"),
+        'lactel_bread': Product(name='LACTEL bread', categories=[food], price=20, description="Baked bread"),
+        'raviolchesx12': Product(name='Ravioloches x12', categories=[food], price=30, description="12 units of authentic italian pasta"),
+        'raviolchesx48': Product(name='Ravioloches x48', categories=[food], price=45, description="48 units of authentic italian pasta"),
+        'milanga': Product(name='Milanga ganga', categories=[food], price=22, description="Breaded meat"),
+        'milanga_napo': Product(name='Milanga ganga napo', categories=[food], price=32, description="Breaded meat with tomato salsa and cheese"),
 
         # CLEANING
-        'detergent': Product(name='Atlantis detergent', categories=[cleaning]),
-        'virulanita': Product(name='Virulanita', categories=[cleaning]),
-        'sponge': Product(name='Spong, bob', categories=[cleaning]),
-        'mop': Product(name='Generic mop', categories=[cleaning]),
+        'detergent': Product(name='Atlantis detergent', categories=[cleaning], price=15, description="Yes, like the movie"),
+        'virulanita': Product(name='Virulanita', categories=[cleaning], price=3, description="For washing the dishes"),
+        'sponge': Product(name='Spong, bob', categories=[cleaning], price=2, description="Yes, like the cartoon"),
+        'mop': Product(name='Generic mop', categories=[cleaning], price=1, description="Just a simple mop"),
 
         # BATHROOM
         'toilet_paper': Product(
-            name='Pure steel toilet paper', categories=[bathroom]),
-        'soap': Product(name='Generic soap', categories=[bathroom]),
-        'shampoo': Product(name='PANTONE shampoo', categories=[bathroom]),
+            name='Pure steel toilet paper', categories=[bathroom], price=9, description="For strong people"),
+        'soap': Product(name='Generic soap', categories=[bathroom], price=10, description="Just a normal soap"),
+        'shampoo': Product(name='PANTONE shampoo', categories=[bathroom], price=13, description="Pantene's second brand"),
         'toothpaste': Product(name='Hang-yourself toothpaste',
-                              categories=[bathroom])
+                              categories=[bathroom], price=20, description="Colgate's dead brother")
     })
 
 
