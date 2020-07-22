@@ -7,9 +7,8 @@ api = Namespace('setup', description='System\'s setup operations')
 
 @api.route('/')
 class Setup(Resource):
-    @api.doc('create_database_info')
+    @api.response(201, 'Content created')
     def get(self):
-        '''Create initial database information'''
-        # CREATE THE INFO HERE!
+        '''Drop all database current information and create initial information'''
         seed_database()
-        return 201
+        return {}, 201

@@ -1,6 +1,7 @@
 from flask_restx import Api
 
 from .setup import api as setup_api
+from .store import api as store_api
 
 api = Api(
     title='Minimart API',
@@ -9,3 +10,4 @@ api = Api(
 )
 
 api.add_namespace(setup_api)
+api.add_namespace(store_api)
