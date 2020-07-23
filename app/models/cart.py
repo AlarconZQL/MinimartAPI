@@ -6,8 +6,8 @@ class Cart(db.Model):
     """Data model for shopping carts"""
     __tablename__ = 'cart'
     id = db.Column(db.Integer, primary_key=True)
-    store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
+    store_id = db.Column(db.Integer, db.ForeignKey('store.id'), nullable=False)
     products = db.relationship('CartProductLink', back_populates='cart')
 
     def __repr__(self):
-        return '<Cart {}, store_id {}>'.format(self.name, self.store_id)
+        return '<Cart {}, store_id {}>'.format(self.id, self.store_id)
