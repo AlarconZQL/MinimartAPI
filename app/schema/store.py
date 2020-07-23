@@ -1,5 +1,5 @@
 from . import ma
-from .product_store import StockSchema
+from .product_store import ProductStockSchema
 from ..models import Store
 
 
@@ -10,7 +10,7 @@ class StoreProductsSchema(ma.SQLAlchemySchema):
 
     id = ma.auto_field()
     name = ma.auto_field()
-    products = ma.List(ma.Nested(StockSchema))
+    products = ma.List(ma.Nested(ProductStockSchema))
 
 
 class StoreDetailSchema(ma.SQLAlchemySchema):

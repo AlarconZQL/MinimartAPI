@@ -8,7 +8,7 @@ class ProductVoucherLink(db.Model):
         'product.id'), primary_key=True)
     voucher_id = db.Column(db.Integer, db.ForeignKey(
         'voucher.id'), primary_key=True)
-    discount = db.Column(db.Numeric(3, 2))
+    discount = db.Column(db.Float)
     on_unit = db.Column(db.Integer)
     max_units = db.Column(db.Integer)
     product = db.relationship("Product", back_populates="vouchers")
