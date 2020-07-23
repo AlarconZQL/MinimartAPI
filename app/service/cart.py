@@ -38,3 +38,30 @@ class CartService:
             else:
                 raise Exception('No stock for that product')
         raise Exception('Cart not found')
+
+    @staticmethod
+    def remove_product_from_cart(cart_id, product_id):
+        cart = Cart.query.get(cart_id)
+        # Check if the cart exists
+        if cart != None:
+            # Check if any unit of the product is in the cart
+            cart_product = CartProductLink.query.filter_by(
+                cart_id=cart.id, product_id=product_id).first()
+            if cart_product != None:
+                # Remove product from cart and delete the relation if units reach zero
+                cart_product.units = cart_product.units - 1
+                if cart_product.units == 0:
+                    db.session.delete(cart_product)
+                # Increase the product's stock on the store
+                store_product = ProductStoreLink.query.filter_by(
+                    store_id=cart_id, product_id=product_id).first()
+                if store_product != None:
+                    store_product.stock = store_product.stock + 1
+                db.session.add(cart)
+                db.session.commit()
+                return cart
+            else:
+                raise Exception(
+                    'This cart does not have any unit of this product')
+        else:
+            raise Exception('Cart not found')

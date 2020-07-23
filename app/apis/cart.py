@@ -25,7 +25,7 @@ class StoreCart(Resource):
 @api.param('cart_id', 'The cart identifier')
 @api.param('product_id', 'The product identifier')
 class CartProduct(Resource):
-    @api.response(201, 'Product added')
+    @api.response(200, 'Product added')
     @api.response(404, 'No stock for that product or non existing cart')
     def post(self, cart_id, product_id):
         '''Adds one unit of the specified product to cart if it has stock'''
@@ -33,6 +33,18 @@ class CartProduct(Resource):
             cart = CartService.add_product_to_cart(cart_id, product_id)
             cart_schema = CartSchema()
             result = cart_schema.dump(cart)
-            return result, 201
+            return result, 200
+        except Exception as error:
+            api.abort(404, error)
+
+    @api.response(200, 'Product removed')
+    @api.response(404, 'There are not any units of this product the cart or non existing cart')
+    def delete(self, cart_id, product_id):
+        '''Remove one unit of the specified product from the cart and returns it to the cart's store'''
+        try:
+            cart = CartService.remove_product_from_cart(cart_id, product_id)
+            cart_schema = CartSchema()
+            result = cart_schema.dump(cart)
+            return result, 200
         except Exception as error:
             api.abort(404, error)
