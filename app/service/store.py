@@ -41,3 +41,17 @@ class StoreService:
     @staticmethod
     def get_all_stores():
         return Store.query.all()
+
+    @staticmethod
+    def get_available_products_for_store(store_id):
+        store = Store.query.get(store_id)
+        if store != None:
+            availables = list(
+                filter(lambda link: link.stock > 0, store.products))
+            return ({
+                'name': store.name,
+                'id': store.id,
+                'products': availables
+            })
+        else:
+            return None

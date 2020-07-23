@@ -47,3 +47,19 @@ class StoreList(Resource):
         stores_detail_schema = StoreDetailSchema(many=True)
         result = stores_detail_schema.dump(stores)
         return result, 200
+
+
+@api.route('/<int:store_id>/product')
+@api.param('store_id', 'The store identifier')
+class StoreProductList(Resource):
+    @api.response(200, 'Success')
+    @api.response(404, 'Store not found')
+    def get(self, store_id):
+        '''Get available products on a specific store'''
+        store_available_products = StoreService.get_available_products_for_store(
+            store_id)
+        if store_available_products != None:
+            store_products_schema = StoreProductsSchema()
+            result = store_products_schema.dump(store_available_products)
+            return result, 200
+        api.abort(404)
