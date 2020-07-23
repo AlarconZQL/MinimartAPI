@@ -18,7 +18,8 @@ def create_app():
     api.init_app(app)
 
     with app.app_context():
-        from .models import Product, Category, Store, WorkingDay, Voucher, VoucherDay
-        from .models import ProductStoreLink, ProductVoucherLink
+        from .models import (Product, Category, Store, WorkingDay, Voucher,
+                             VoucherDay, ProductStoreLink, ProductVoucherLink,
+                             Cart, CartProductLink)
         db.create_all()
         return app
