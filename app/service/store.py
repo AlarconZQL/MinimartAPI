@@ -5,6 +5,14 @@ from app.models import Store, Product, ProductStoreLink
 
 class StoreService:
     @classmethod
+    def get_all_stores(cls):
+        return Store.query.all()
+
+    @classmethod
+    def get_store(cls, store_id):
+        return Store.query.get(store_id)
+
+    @classmethod
     def get_available_products_per_store(cls):
         stores = cls.get_all_stores()
         result = []
@@ -35,11 +43,3 @@ class StoreService:
                     opened_stores.append(store)
                     break
         return opened_stores
-
-    @classmethod
-    def get_all_stores(cls):
-        return Store.query.all()
-
-    @classmethod
-    def get_store(cls, store_id):
-        return Store.query.get(store_id)
