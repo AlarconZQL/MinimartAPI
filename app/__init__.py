@@ -3,23 +3,16 @@ from .extensions import db, ma
 from .apis import api
 
 
-def create_app():
+def create_app(settings_module):
     """Create main application"""
     app = Flask(__name__)
 
-    app.config['DEBUG'] = True
-    app.config['TESTING'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///coco-minimart.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # Load the config file specified by APP_ENV
+    app.config.from_object(settings_module)
 
-    """Initialize plugins"""
+    # Initialize plugins
     db.init_app(app)
     ma.init_app(app)
     api.init_app(app)
 
-    with app.app_context():
-        from .models import (Product, Category, Store, WorkingDay, Voucher,
-                             VoucherDay, ProductStoreLink, ProductVoucherLink,
-                             Cart, CartProductLink)
-        db.create_all()
-        return app
+    return app
