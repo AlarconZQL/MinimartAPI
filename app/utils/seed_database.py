@@ -179,15 +179,15 @@ def generate_stock(stores, products):
 def create_vouchers():
     return ({
             'COCO1V1F8XOG1MZZ': Voucher(code='COCO1V1F8XOG1MZZ',
-                                        start_date=date(2020, 7, 27), end_date=date(2020, 8, 13),
+                                        start_date=date(2020, 7, 1), end_date=date(2020, 8, 13),
                                         only_on_days=[VoucherDay(day=Days.Wednesday),
                                                       VoucherDay(day=Days.Thursday)]),
             'COCOKCUD0Z9LUKBN': Voucher(code='COCOKCUD0Z9LUKBN',
-                                        start_date=date(2020, 7, 24), end_date=date(2020, 8, 6)),
+                                        start_date=date(2020, 7, 1), end_date=date(2020, 8, 6)),
             'COCOG730CNSG8ZVX': Voucher(code='COCOG730CNSG8ZVX',
-                                        start_date=date(2020, 7, 31), end_date=date(2020, 8, 9)),
+                                        start_date=date(2020, 7, 1), end_date=date(2020, 8, 9)),
             'COCO2O1USLC6QR22': Voucher(code='COCO2O1USLC6QR22',
-                                        start_date=date(2020, 8, 1), end_date=date(2020, 8, 31)),
+                                        start_date=date(2020, 7, 1), end_date=date(2020, 8, 31)),
             'COCO0FLEQ287CC05': Voucher(code='COCO0FLEQ287CC05',
                                         start_date=date(2020, 7, 1), end_date=date(2020, 7, 15),
                                         only_on_days=[VoucherDay(day=Days.Monday)])
@@ -216,8 +216,8 @@ def assign_products_to_vouchers(products, vouchers):
             "voucher": vouchers['COCO1V1F8XOG1MZZ'],
             "products": cleaning_products,
             "discount": 20,
-            "on_unit": None,
-            "max_units": None,
+            "on_unit": 1,
+            "max_units": 0,
         },
         {
             "voucher": vouchers['COCOKCUD0Z9LUKBN'],
@@ -230,22 +230,22 @@ def assign_products_to_vouchers(products, vouchers):
             "voucher": vouchers['COCOG730CNSG8ZVX'],
             "products": bathroom_products + sodas_products,
             "discount": 10,
-            "on_unit": None,
-            "max_units": None,
+            "on_unit": 1,
+            "max_units": 0,
         },
         {
             "voucher": vouchers['COCO2O1USLC6QR22'],
             "products": [products['cola'], products['slurm'], products['diet_slurm']],
             "discount": 30,
             "on_unit": 2,
-            "max_units": 2,
+            "max_units": 0,
         },
         {
             "voucher": vouchers['COCO0FLEQ287CC05'],
             "products": [products['toothpaste']],
             "discount": 50,
             "on_unit": 2,
-            "max_units": 2,
+            "max_units": 0,
         }
     ]
 

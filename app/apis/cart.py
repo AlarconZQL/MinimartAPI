@@ -48,3 +48,22 @@ class CartProduct(Resource):
             return result, 200
         except Exception as error:
             api.abort(404, error)
+
+
+@api.route('/<int:cart_id>/voucher/<int:voucher_id>')
+@api.param('cart_id', 'The cart identifier')
+@api.param('voucher_id', 'The voucher identifier')
+class CartVoucher(Resource):
+    @api.response(200, 'Success')
+    @api.response(404, 'Cart not found')
+    def get(self, cart_id, voucher_id):
+        '''Check validity of a voucher, applies it to the cart if its valid and return original and discounted price'''
+        try:
+            original_price = CartService.get_price_from_cart(cart_id)
+            discount_price = CartService.get_price_from_cart_applying_voucher(
+                cart_id, voucher_id)
+            result = {'original_price': original_price,
+                      'discount_price': discount_price}
+            return result, 200
+        except Exception as error:
+            api.abort(404, error)
