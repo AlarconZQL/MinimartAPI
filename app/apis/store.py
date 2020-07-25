@@ -1,6 +1,6 @@
 from datetime import datetime
-from flask import request, abort
-from flask_restx import Namespace, Resource
+from flask import request
+from flask_restx import Namespace, Resource, abort
 from app import db
 from app.service import StoreService
 from app.schema import StoreProductsSchema, StoreDetailSchema
@@ -12,7 +12,7 @@ api = Namespace('store', description='Store\'s operations')
 class StoreAvailableProducts(Resource):
     @api.response(200, 'Success')
     def get(self):
-        '''Get all available products on each store'''
+        '''Get all available products from each store'''
         store_products_schema = StoreProductsSchema(many=True)
         stores_available_products = StoreService.get_available_products_per_store()
         result = store_products_schema.dump(stores_available_products)
@@ -32,16 +32,15 @@ class StoreList(Resource):
         time_format = '%H:%M'
         opened_at = request.args.get('openedAt')
         if opened_at is not None:
-            print('Received url params: isOpenAt:', opened_at)
             try:
                 parsed_time = datetime.strptime(opened_at, time_format).time()
-                opened_stores = StoreService.get_stores_opened_today_at(
-                    parsed_time)
-                stores = opened_stores
             except ValueError:
                 error_message = '{} does not match {} format'.format(
                     opened_at, time_format)
                 abort(400, error_message)
+            opened_stores = StoreService.get_stores_opened_today_at(
+                parsed_time)
+            stores = opened_stores
         else:
             stores = StoreService.get_all_stores()
         stores_detail_schema = StoreDetailSchema(many=True)
@@ -51,15 +50,16 @@ class StoreList(Resource):
 
 @api.route('/<int:store_id>/product')
 @api.param('store_id', 'The store identifier')
-class StoreProductList(Resource):
+class StoreProductsList(Resource):
     @api.response(200, 'Success')
-    @api.response(404, 'Store not found')
+    @api.response(404, 'Resource not found')
     def get(self, store_id):
         '''Get available products on a specific store'''
-        store_available_products = StoreService.get_available_products_for_store(
-            store_id)
-        if store_available_products != None:
-            store_products_schema = StoreProductsSchema()
-            result = store_products_schema.dump(store_available_products)
-            return result, 200
-        api.abort(404)
+        store = StoreService.get_store(store_id)
+        if store == None:
+            abort(404, 'Store not found')
+        store_available_products = StoreService.get_store_available_products(
+            store)
+        store_products_schema = StoreProductsSchema()
+        result = store_products_schema.dump(store_available_products)
+        return result, 200
