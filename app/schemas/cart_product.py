@@ -1,6 +1,6 @@
-from . import ma
-from .product import ProductSchema
-from ..models import CartProductLink
+from app import ma
+from app.schemas.product import ProductSchema
+from app.models import CartProductLink
 
 
 class CartProductSchema(ma.SQLAlchemySchema):

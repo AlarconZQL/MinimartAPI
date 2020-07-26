@@ -4,7 +4,7 @@ from app.service.cart import CartService
 from app.service.store import StoreService
 from app.service.product import ProductService
 from app.service.voucher import VoucherService
-from app.schema import CartCreatedSchema, CartSchema
+from app.schemas import CartCreatedSchema, CartSchema
 from app.exceptions import (
     NoStockException, ProductNotFoundInCart, VoucherNotValidException)
 

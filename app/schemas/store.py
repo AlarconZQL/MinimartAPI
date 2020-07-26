@@ -1,6 +1,6 @@
-from . import ma
-from .product_store import ProductStockSchema
-from ..models import Store
+from app import ma
+from app.schemas.product_store import ProductStockSchema
+from app.models import Store
 
 
 class StoreProductsSchema(ma.SQLAlchemySchema):
