@@ -1,4 +1,4 @@
-from ..models import ProductStoreLink, Product, Store
+from app.models import ProductStoreLink, Product, Store
 
 
 class ProductService:

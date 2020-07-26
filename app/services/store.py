@@ -37,7 +37,8 @@ class StoreService:
         opened_stores = []
         for store in stores:
             today_workindays = list(
-                filter(lambda current: current.day.name == today_name, store.workingdays))
+                filter(lambda current: current.day.name == today_name,
+                       store.workingdays))
             for workingday in today_workindays:
                 if workingday.starts_at <= time <= workingday.finishes_at:
                     opened_stores.append(store)

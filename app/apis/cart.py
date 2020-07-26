@@ -1,9 +1,9 @@
 from flask_restx import Namespace, Resource, abort
 from app import db
-from app.service.cart import CartService
-from app.service.store import StoreService
-from app.service.product import ProductService
-from app.service.voucher import VoucherService
+from app.services.cart import CartService
+from app.services.store import StoreService
+from app.services.product import ProductService
+from app.services.voucher import VoucherService
 from app.schemas import CartCreatedSchema, CartSchema
 from app.exceptions import (
     NoStockException, ProductNotFoundInCart, VoucherNotValidException)

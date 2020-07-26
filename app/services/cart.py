@@ -1,9 +1,11 @@
 import calendar
 from datetime import date
 from app import db
-from app.models import Cart, ProductStoreLink, CartProductLink, Voucher, ProductVoucherLink
+from app.models import (Cart, ProductStoreLink, CartProductLink, Voucher,
+                        ProductVoucherLink)
 from app.utils import DateUtils
-from app.exceptions import NoStockException, ProductNotFoundInCart, VoucherNotValidException
+from app.exceptions import (NoStockException, ProductNotFoundInCart,
+                            VoucherNotValidException)
 
 
 class CartService:
@@ -23,12 +25,12 @@ class CartService:
         # Check if the store has stock of the product
         store_product = ProductStoreLink.query.filter_by(
             store_id=cart.store_id, product_id=product.id).first()
-        if store_product != None and store_product.stock > 0:
+        if store_product is not None and store_product.stock > 0:
             store_product.stock = store_product.stock - 1
             # Add product to the cart
             cart_product = CartProductLink.query.filter_by(
                 cart_id=cart.id, product_id=product.id).first()
-            if cart_product != None:
+            if cart_product is not None:
                 cart_product.units = cart_product.units + 1
             else:
                 cart.products.append(CartProductLink(
@@ -44,7 +46,7 @@ class CartService:
         # Check if any unit of the product is in the cart
         cart_product = CartProductLink.query.filter_by(
             cart_id=cart.id, product_id=product.id).first()
-        if cart_product != None:
+        if cart_product is not None:
             # Remove product from cart and delete the relation if units reach zero
             cart_product.units = cart_product.units - 1
             if cart_product.units == 0:
@@ -53,7 +55,7 @@ class CartService:
             # Increase the product's stock on the store
             store_product = ProductStoreLink.query.filter_by(
                 store_id=cart.store_id, product_id=product.id).first()
-            if store_product != None:
+            if store_product is not None:
                 store_product.stock = store_product.stock + 1
             db.session.add(cart)
             db.session.commit()
@@ -81,18 +83,17 @@ class CartService:
             if product.id in product_ids_on_promos:
                 promo = list(filter(lambda a: a.product.id ==
                                     product.id, voucher_promos))[0]
-                product_total = cls.calculate_price_with_discount(product_cart.units,
-                                                                  product.price,
-                                                                  promo.discount,
-                                                                  promo.on_unit,
-                                                                  promo.max_units)
+                product_total = cls.calculate_price_with_discount(
+                    product_cart.units, product.price, promo.discount,
+                    promo.on_unit, promo.max_units)
             else:
                 product_total = product_cart.units * product.price
             total_price += product_total
         return total_price
 
     @classmethod
-    def calculate_price_with_discount(cls, total_units, unit_price, discount, on_unit, max_units):
+    def calculate_price_with_discount(cls, total_units, unit_price, discount,
+                                      on_unit, max_units):
         total_price = 0
         reached_max = False
         for unit in range(1, total_units+1):
@@ -110,10 +111,12 @@ class CartService:
             raise VoucherNotValidException(
                 message='Voucher does not apply on the cart\'s store')
         # Check if today's date applies
-        if not DateUtils.today_is_between_dates(voucher.start_date, voucher.end_date):
+        if not DateUtils.today_is_between_dates(voucher.start_date,
+                                                voucher.end_date):
             raise VoucherNotValidException(
                 message='Current date is not in the voucher\'s valid dates')
         # Check if today's day of week applies
-        if len(voucher.only_on_days) > 0 and not DateUtils.today_is_included_on_voucherdays(voucher.only_on_days):
+        if len(voucher.only_on_days) > 0 and not(
+                DateUtils.today_is_included_on_voucherdays(voucher.only_on_days)):
             raise VoucherNotValidException(
                 message='Voucher does not apply this day of the week')

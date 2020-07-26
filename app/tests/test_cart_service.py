@@ -3,7 +3,7 @@ from app import db
 from app.tests import BaseTestClass
 from app.models import (Cart, Store, Product, ProductStoreLink, CartProductLink,
                         Voucher, ProductVoucherLink)
-from app.service.cart import CartService
+from app.services.cart import CartService
 
 
 class CartServiceTestCase(BaseTestClass):

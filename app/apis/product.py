@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, abort
 from app import db
-from app.service import ProductService, StoreService
+from app.services import ProductService, StoreService
 from app.schemas import ProductSchema, ProductStockSchema
 
 api = Namespace('product', description='Product\'s operations')

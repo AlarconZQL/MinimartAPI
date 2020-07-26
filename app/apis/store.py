@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import request
 from flask_restx import Namespace, Resource, abort
 from app import db
-from app.service import StoreService
+from app.services import StoreService
 from app.schemas import StoreProductsSchema, StoreDetailSchema
 
 api = Namespace('store', description='Store\'s operations')
