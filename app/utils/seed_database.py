@@ -6,6 +6,8 @@ from app.utils import Days
 
 
 def seed_database():
+    """Drops all database current information and initializes it with 
+    the project's initial data"""
 
     app.logger.info('Droping all database tables...')
     db.drop_all()

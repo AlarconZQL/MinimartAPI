@@ -5,7 +5,7 @@ from app.models.store_workingday import store_workingday
 
 
 class WorkingDay(db.Model):
-    '''Data model for workingdays'''
+    '''Data model for working days'''
     __tablename__ = 'workingday'
     __table_args__ = (UniqueConstraint('day', 'starts_at', 'finishes_at',
                                        name='_workingday_uc'),)

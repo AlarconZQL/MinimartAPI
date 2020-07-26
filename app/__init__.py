@@ -1,13 +1,13 @@
 from flask import Flask
-from .extensions import db, ma
-from .apis import api
+from app.extensions import db, ma
+from app.apis import api
 
 
 def create_app(settings_module):
-    """Create main application"""
+    """Creates an application instance based on the specified settings"""
     app = Flask(__name__)
 
-    # Load the config file specified by APP_ENV
+    # Load config file
     app.config.from_object(settings_module)
 
     # Initialize plugins
