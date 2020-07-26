@@ -49,6 +49,7 @@ class CartService:
             cart_product.units = cart_product.units - 1
             if cart_product.units == 0:
                 db.session.delete(cart_product)
+                db.session.commit()
             # Increase the product's stock on the store
             store_product = ProductStoreLink.query.filter_by(
                 store_id=cart.store_id, product_id=product.id).first()
