@@ -1,8 +1,8 @@
 from datetime import date, timedelta
 from app import db
 from app.tests import BaseTestClass
-from app.models import (Cart, Store, Product, ProductStoreLink, CartProductLink,
-                        Voucher, ProductVoucherLink)
+from app.models import (Cart, Store, Product, ProductStoreLink,
+                        CartProductLink, Voucher, ProductVoucherLink)
 from app.services.cart import CartService
 
 
@@ -86,8 +86,9 @@ class CartServiceTestCase(BaseTestClass):
             today = date.today()
             link = CartProductLink(product=product2, units=2)
             cart.products.append(link)
-            voucher = Voucher(code='TESTCODE', store_id=store.id, start_date=today -
-                              timedelta(days=5), end_date=today + timedelta(days=5))
+            voucher = Voucher(code='TESTCODE', store_id=store.id,
+                              start_date=today - timedelta(days=5),
+                              end_date=today + timedelta(days=5))
             link = ProductVoucherLink(
                 discount=50, on_unit=1, max_units=0, product=product)
             voucher.products.append(link)

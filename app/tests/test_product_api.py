@@ -22,6 +22,7 @@ class ProductApiTestCase(BaseTestClass):
             db.session.add(store)
             db.session.commit()
             res = self.client.get(
-                f'/product/{product.id}/store/{store.id}', follow_redirects=True)
+                f'/product/{product.id}/store/{store.id}',
+                follow_redirects=True)
             self.assertEqual(200, res.status_code)
             self.assertTrue(self.is_json_content_type(res.content_type))

@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from app import db
-from app.models import (Store, Cart, Product, ProductStoreLink, CartProductLink,
-                        Voucher)
+from app.models import (Store, Cart, Product, ProductStoreLink,
+                        CartProductLink, Voucher)
 from app.tests import BaseTestClass
 
 
@@ -70,7 +70,8 @@ class CartApiTestCase(BaseTestClass):
             db.session.commit()
             today = date.today()
             voucher = Voucher(code='TESTCODE', store_id=store.id,
-                              start_date=today, end_date=today+timedelta(days=5))
+                              start_date=today,
+                              end_date=today+timedelta(days=5))
             cart = Cart(store_id=store.id)
             db.session.add(cart)
             db.session.add(voucher)

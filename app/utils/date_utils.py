@@ -1,6 +1,6 @@
 import calendar
 from datetime import date
-from .days import Days
+from app.utils.days import Days
 
 
 class DateUtils:

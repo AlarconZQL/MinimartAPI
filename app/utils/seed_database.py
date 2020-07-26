@@ -1,8 +1,8 @@
 from random import randint
 from datetime import time, date
 from flask import current_app as app
-from ..models import *
-from . import Days
+from app.models import *
+from app.utils import Days
 
 
 def seed_database():
@@ -53,25 +53,35 @@ def create_working_days():
     return(
         {
             'monday_morning': WorkingDay(day=Days.Monday,
-                                         starts_at=time(8, 0), finishes_at=time(14, 0)),
+                                         starts_at=time(8, 0),
+                                         finishes_at=time(14, 0)),
             'tuesday_morning': WorkingDay(day=Days.Tuesday,
-                                          starts_at=time(8, 0), finishes_at=time(14, 0)),
+                                          starts_at=time(8, 0),
+                                          finishes_at=time(14, 0)),
             'wednesday_morning': WorkingDay(day=Days.Wednesday,
-                                            starts_at=time(8, 0), finishes_at=time(14, 0)),
+                                            starts_at=time(8, 0),
+                                            finishes_at=time(14, 0)),
             'thursday_morning': WorkingDay(day=Days.Thursday,
-                                           starts_at=time(8, 0), finishes_at=time(14, 0)),
+                                           starts_at=time(8, 0),
+                                           finishes_at=time(14, 0)),
             'friday_morning': WorkingDay(day=Days.Friday,
-                                         starts_at=time(8, 0), finishes_at=time(14, 0)),
+                                         starts_at=time(8, 0),
+                                         finishes_at=time(14, 0)),
             'monday_afternoon': WorkingDay(day=Days.Monday,
-                                           starts_at=time(14, 0), finishes_at=time(20, 0)),
+                                           starts_at=time(14, 0),
+                                           finishes_at=time(20, 0)),
             'tuesday_afternoon': WorkingDay(day=Days.Tuesday,
-                                            starts_at=time(14, 0), finishes_at=time(20, 0)),
+                                            starts_at=time(14, 0),
+                                            finishes_at=time(20, 0)),
             'wednesday_afternoon': WorkingDay(day=Days.Wednesday,
-                                              starts_at=time(14, 0), finishes_at=time(20, 0)),
+                                              starts_at=time(14, 0),
+                                              finishes_at=time(20, 0)),
             'thursday_afternoon': WorkingDay(day=Days.Thursday,
-                                             starts_at=time(14, 0), finishes_at=time(20, 0)),
+                                             starts_at=time(14, 0),
+                                             finishes_at=time(20, 0)),
             'friday_afternoon': WorkingDay(day=Days.Friday,
-                                           starts_at=time(14, 0), finishes_at=time(20, 0)),
+                                           starts_at=time(14, 0),
+                                           finishes_at=time(20, 0)),
         })
 
 
@@ -81,12 +91,14 @@ def create_and_set_store_working_days(stores):
         {
             'store': stores['COCO_DOWNTOWN'],
             'working_days': ['monday_morning', 'tuesday_morning',
-                             'wednesday_morning', 'thursday_morning', 'friday_morning']
+                             'wednesday_morning', 'thursday_morning',
+                             'friday_morning']
         },
         {
             'store': stores['COCO_BAY'],
             'working_days': ['monday_afternoon', 'tuesday_afternoon',
-                             'wednesday_afternoon', 'thursday_afternoon', 'friday_afternoon']
+                             'wednesday_afternoon', 'thursday_afternoon',
+                             'friday_afternoon']
         },
         {
             'store': stores['COCO_MALL'],
@@ -116,47 +128,77 @@ def create_products(categories):
     bathroom = categories['bathroom']
     return ({
         # SODAS
-        'tea': Product(name='Cold Ice Tea', categories=[sodas], price=10, description="Chinese tea"),
-        'coffee': Product(name='Coffee flavoured milk', categories=[sodas], price=15, description="Colombian coffee"),
-        'cola': Product(name='Nuka-Cola', categories=[sodas], price=20.5, description="Explosive cola"),
-        'sprute': Product(name='Sprute', categories=[sodas], price=18, description="Sprite's young brother"),
-        'slurm': Product(name='Slurm', categories=[sodas], price=12, description="Unknown flavour"),
-        'diet_slurm': Product(name='Diet Slurm', categories=[sodas], price=15, description="Unknown flavour, less calories"),
+        'tea': Product(name='Cold Ice Tea', categories=[sodas], price=10,
+                       description="Chinese tea"),
+        'coffee': Product(name='Coffee flavoured milk', categories=[sodas],
+                          price=15, description="Colombian coffee"),
+        'cola': Product(name='Nuka-Cola', categories=[sodas], price=20.5,
+                        description="Explosive cola"),
+        'sprute': Product(name='Sprute', categories=[sodas], price=18,
+                          description="Sprite's young brother"),
+        'slurm': Product(name='Slurm', categories=[sodas], price=12,
+                         description="Unknown flavour"),
+        'diet_slurm': Product(name='Diet Slurm', categories=[sodas], price=15,
+                              description="Unknown flavour, less calories"),
 
         # FOOD
-        'salsa_cookies': Product(name='Salsa Cookies', categories=[food], price=5, description="Chocolate cookies"),
-        'windmill_cookies': Product(name='Windmill Cookies', categories=[food], price=8, description="Vanilla cookies"),
-        'garlic_bread': Product(name='Garlic-o-bread 2000', categories=[food], price=18.5, description="Garlic flavoured bread"),
-        'lactel_bread': Product(name='LACTEL bread', categories=[food], price=20, description="Baked bread"),
-        'raviolchesx12': Product(name='Ravioloches x12', categories=[food], price=30, description="12 units of authentic italian pasta"),
-        'raviolchesx48': Product(name='Ravioloches x48', categories=[food], price=45, description="48 units of authentic italian pasta"),
-        'milanga': Product(name='Milanga ganga', categories=[food], price=22, description="Breaded meat"),
-        'milanga_napo': Product(name='Milanga ganga napo', categories=[food], price=32, description="Breaded meat with tomato salsa and cheese"),
+        'salsa_cookies': Product(name='Salsa Cookies', categories=[food],
+                                 price=5, description="Chocolate cookies"),
+        'windmill_cookies': Product(name='Windmill Cookies', categories=[food],
+                                    price=8, description="Vanilla cookies"),
+        'garlic_bread': Product(name='Garlic-o-bread 2000', categories=[food],
+                                price=18.5,
+                                description="Garlic flavoured bread"),
+        'lactel_bread': Product(name='LACTEL bread', categories=[food],
+                                price=20, description="Baked bread"),
+        'raviolchesx12': Product(name='Ravioloches x12', categories=[food],
+                                 price=30,
+                                 description="12 units of authentic italian pasta"),
+        'raviolchesx48': Product(name='Ravioloches x48', categories=[food],
+                                 price=45,
+                                 description="48 units of authentic italian pasta"),
+        'milanga': Product(name='Milanga ganga', categories=[food], price=22,
+                           description="Breaded meat"),
+        'milanga_napo': Product(name='Milanga ganga napo', categories=[food],
+                                price=32,
+                                description="Breaded meat with tomato salsa and cheese"),
 
         # CLEANING
-        'detergent': Product(name='Atlantis detergent', categories=[cleaning], price=15, description="Yes, like the movie"),
-        'virulanita': Product(name='Virulanita', categories=[cleaning], price=3, description="For washing the dishes"),
-        'sponge': Product(name='Spong, bob', categories=[cleaning], price=2, description="Yes, like the cartoon"),
-        'mop': Product(name='Generic mop', categories=[cleaning], price=1, description="Just a simple mop"),
+        'detergent': Product(name='Atlantis detergent', categories=[cleaning],
+                             price=15, description="Yes, like the movie"),
+        'virulanita': Product(name='Virulanita', categories=[cleaning], price=3,
+                              description="For washing the dishes"),
+        'sponge': Product(name='Spong, bob', categories=[cleaning], price=2,
+                          description="Yes, like the cartoon"),
+        'mop': Product(name='Generic mop', categories=[cleaning], price=1,
+                       description="Just a simple mop"),
 
         # BATHROOM
         'toilet_paper': Product(
-            name='Pure steel toilet paper', categories=[bathroom], price=9, description="For strong people"),
-        'soap': Product(name='Generic soap', categories=[bathroom], price=10, description="Just a normal soap"),
-        'shampoo': Product(name='PANTONE shampoo', categories=[bathroom], price=13, description="Pantene's second brand"),
+            name='Pure steel toilet paper', categories=[bathroom], price=9,
+            description="For strong people"),
+        'soap': Product(name='Generic soap', categories=[bathroom], price=10,
+                        description="Just a normal soap"),
+        'shampoo': Product(name='PANTONE shampoo', categories=[bathroom],
+                           price=13, description="Pantene's second brand"),
         'toothpaste': Product(name='Hang-yourself toothpaste',
-                              categories=[bathroom], price=20, description="Colgate's dead brother")
+                              categories=[bathroom], price=20,
+                              description="Colgate's dead brother")
     })
 
 
 def generate_stock(stores, products):
     coco_bay_no_stock = [products['diet_slurm'], products['toilet_paper'],
-                         products['soap'], products['shampoo'], products['toothpaste']]
+                         products['soap'], products['shampoo'],
+                         products['toothpaste']]
     coco_mall_no_stock = [products['raviolchesx12'], products['raviolchesx48'],
-                          products['milanga'], products['milanga_napo'], products['detergent'],
-                          products['virulanita'], products['sponge'], products['mop']]
+                          products['milanga'], products['milanga_napo'],
+                          products['detergent'],
+                          products['virulanita'], products['sponge'],
+                          products['mop']]
     coco_downtown_no_stock = [products['sprute'], products['slurm'],
-                              products['detergent'], products['virulanita'], products['sponge'],
+                              products['detergent'], products['virulanita'],
+                              products['sponge'],
                               products['mop'], products['toilet_paper']]
 
     stores_stock_info = [
@@ -179,18 +221,25 @@ def generate_stock(stores, products):
 def create_vouchers():
     return ({
             'COCO1V1F8XOG1MZZ': Voucher(code='COCO1V1F8XOG1MZZ',
-                                        start_date=date(2020, 7, 1), end_date=date(2020, 8, 13),
-                                        only_on_days=[VoucherDay(day=Days.Wednesday),
-                                                      VoucherDay(day=Days.Thursday)]),
+                                        start_date=date(2020, 7, 1),
+                                        end_date=date(2020, 8, 13),
+                                        only_on_days=[VoucherDay(
+                                            day=Days.Wednesday),
+                                            VoucherDay(day=Days.Thursday)]),
             'COCOKCUD0Z9LUKBN': Voucher(code='COCOKCUD0Z9LUKBN',
-                                        start_date=date(2020, 7, 1), end_date=date(2020, 8, 6)),
+                                        start_date=date(2020, 7, 1),
+                                        end_date=date(2020, 8, 6)),
             'COCOG730CNSG8ZVX': Voucher(code='COCOG730CNSG8ZVX',
-                                        start_date=date(2020, 7, 1), end_date=date(2020, 8, 9)),
+                                        start_date=date(2020, 7, 1),
+                                        end_date=date(2020, 8, 9)),
             'COCO2O1USLC6QR22': Voucher(code='COCO2O1USLC6QR22',
-                                        start_date=date(2020, 7, 1), end_date=date(2020, 8, 31)),
+                                        start_date=date(2020, 7, 1),
+                                        end_date=date(2020, 8, 31)),
             'COCO0FLEQ287CC05': Voucher(code='COCO0FLEQ287CC05',
-                                        start_date=date(2020, 7, 1), end_date=date(2020, 7, 15),
-                                        only_on_days=[VoucherDay(day=Days.Monday)])
+                                        start_date=date(2020, 7, 1),
+                                        end_date=date(2020, 7, 15),
+                                        only_on_days=[VoucherDay(
+                                            day=Days.Monday)])
             })
 
 
@@ -198,7 +247,8 @@ def assign_products_to_vouchers(products, vouchers):
     # Set voucher's products
 
     sodas_products = [products['tea'], products['coffee'], products['cola'],
-                      products['sprute'], products['slurm'], products['diet_slurm']]
+                      products['sprute'], products['slurm'],
+                      products['diet_slurm']]
 
     food_products = [products['salsa_cookies'], products['windmill_cookies'],
                      products['garlic_bread'], products['lactel_bread'],
@@ -206,10 +256,12 @@ def assign_products_to_vouchers(products, vouchers):
                      products['milanga'], products['milanga_napo']]
 
     cleaning_products = [products['detergent'],
-                         products['virulanita'], products['sponge'], products['mop']]
+                         products['virulanita'], products['sponge'],
+                         products['mop']]
 
     bathroom_products = [products['toilet_paper'],
-                         products['soap'], products['shampoo'], products['toothpaste']]
+                         products['soap'], products['shampoo'],
+                         products['toothpaste']]
 
     vouchers_info = [
         {
@@ -235,7 +287,8 @@ def assign_products_to_vouchers(products, vouchers):
         },
         {
             "voucher": vouchers['COCO2O1USLC6QR22'],
-            "products": [products['cola'], products['slurm'], products['diet_slurm']],
+            "products": [products['cola'], products['slurm'],
+                         products['diet_slurm']],
             "discount": 30,
             "on_unit": 2,
             "max_units": 0,
@@ -279,10 +332,13 @@ def create_stores():
     return (
         {
             'COCO_DOWNTOWN': Store(
-                name='COCO Downtown', address='Fake address number 1', logo_url='http://fakeimage1'),
+                name='COCO Downtown', address='Fake address number 1',
+                logo_url='http://fakeimage1'),
             'COCO_BAY': Store(
-                name='COCO Bay', address='Fake address number 2', logo_url='http://fakeimage2'),
+                name='COCO Bay', address='Fake address number 2',
+                logo_url='http://fakeimage2'),
             'COCO_MALL': Store(
-                name='COCO Mall', address='Fake address number 3', logo_url='http://fakeimage3')
+                name='COCO Mall', address='Fake address number 3',
+                logo_url='http://fakeimage3')
         }
     )
