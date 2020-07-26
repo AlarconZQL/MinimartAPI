@@ -21,7 +21,7 @@ class StoreAvailableProducts(Resource):
 
 @api.doc(params={'openedAt':
                  {'description': 'Filter by those which are available'
-                  'today at certain time', 'in': 'query',
+                  ' today at certain time', 'in': 'query',
                   'type': 'time(HH:MM)'}
                  })
 @api.route('/')
