@@ -16,3 +16,6 @@ class BaseTestClass(unittest.TestCase):
             # Drop all database tables
             db.session.remove()
             db.drop_all()
+
+    def is_json_content_type(self, content_type):
+        return content_type == 'application/json'

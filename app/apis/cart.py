@@ -85,7 +85,7 @@ class CartVoucher(Resource):
             discounted_price = CartService.get_discounted_price_from_cart(
                 cart, voucher)
             result = {'original_price': original_price,
-                      'discount_price': discounted_price}
+                      'discounted_price': discounted_price}
             return result, 200
         except VoucherNotValidException as exc:
             return {'message': exc.message}, 200
