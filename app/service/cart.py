@@ -113,6 +113,6 @@ class CartService:
             raise VoucherNotValidException(
                 message='Current date is not in the voucher\'s valid dates')
         # Check if today's day of week applies
-        if len(voucher.only_on_days) > 0 and not DateUtils.today_is_included_on_weekdays(voucher.only_on_days):
+        if len(voucher.only_on_days) > 0 and not DateUtils.today_is_included_on_voucherdays(voucher.only_on_days):
             raise VoucherNotValidException(
                 message='Voucher does not apply this day of the week')

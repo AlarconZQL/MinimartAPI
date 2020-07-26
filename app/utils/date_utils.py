@@ -15,7 +15,7 @@ class DateUtils:
         return start_date <= date.today() <= end_date
 
     @staticmethod
-    def today_is_included_on_weekdays(weekdays):
+    def today_is_included_on_voucherdays(weekdays):
         current_weekday = calendar.day_name[date.today().weekday()]
         weekday_names = list(
             map(lambda weekday: weekday.day.name, weekdays))
