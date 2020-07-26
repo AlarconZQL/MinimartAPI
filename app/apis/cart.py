@@ -11,6 +11,21 @@ from app.exceptions import (
 api = Namespace('cart', description='Cart\'s operations')
 
 
+@api.route('/<int:cart_id>')
+@api.param('cart_id', 'The cart identifier')
+class Cart(Resource):
+    @api.response(404, 'Resource not found')
+    @api.response(200, 'Success')
+    def get(self, cart_id):
+        """Retrieves cart's information"""
+        cart = CartService.get_cart(cart_id)
+        if cart is None:
+            abort(404, 'Cart not found')
+        cart_schema = CartSchema()
+        result = cart_schema.dump(cart)
+        return result, 201
+
+
 @api.route('/store/<int:store_id>')
 @api.param('store_id', 'The store identifier')
 class StoreCart(Resource):
