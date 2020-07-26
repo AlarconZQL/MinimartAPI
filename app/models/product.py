@@ -1,5 +1,5 @@
-from . import db
-from .category_product import category_product
+from app.models import db
+from app.models.category_product import category_product
 
 
 class Product(db.Model):
@@ -16,4 +16,4 @@ class Product(db.Model):
     carts = db.relationship('CartProductLink', back_populates='product')
 
     def __repr__(self):
-        return '<Product {}>'.format(self.name)
+        return f'<Product {self.name}>'

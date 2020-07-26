@@ -1,5 +1,5 @@
-from . import db
-from .category_product import category_product
+from app.models import db
+from app.models.category_product import category_product
 
 
 class Category(db.Model):
@@ -11,4 +11,4 @@ class Category(db.Model):
         'Product', secondary=category_product, back_populates='categories')
 
     def __repr__(self):
-        return '<Category {}>'.format(self.name)
+        return f'<Category {self.name}>'

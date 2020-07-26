@@ -1,5 +1,5 @@
-from . import db
-from .store_workingday import store_workingday
+from app.models import db
+from app.models.store_workingday import store_workingday
 
 
 class Store(db.Model):
@@ -15,4 +15,4 @@ class Store(db.Model):
     vouchers = db.relationship('Voucher', back_populates='store')
 
     def __repr__(self):
-        return '<Store {}>'.format(self.name)
+        return f'<Store {self.name}>'

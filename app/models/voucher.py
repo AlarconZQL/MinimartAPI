@@ -1,4 +1,4 @@
-from . import db
+from app.models import db
 
 
 class Voucher(db.Model):
@@ -14,4 +14,4 @@ class Voucher(db.Model):
     products = db.relationship('ProductVoucherLink', back_populates='voucher')
 
     def __repr__(self):
-        return '<Voucher {}>'.format(self.code)
+        return f'<Voucher {self.code}>'

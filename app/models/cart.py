@@ -1,5 +1,5 @@
 from sqlalchemy import UniqueConstraint
-from . import db
+from app.models import db
 
 
 class Cart(db.Model):
@@ -10,4 +10,4 @@ class Cart(db.Model):
     products = db.relationship('CartProductLink', back_populates='cart')
 
     def __repr__(self):
-        return '<Cart {}, store_id {}>'.format(self.id, self.store_id)
+        return f'<Cart {self.id}, store_id {self.store_id}>'
