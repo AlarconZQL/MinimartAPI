@@ -12,7 +12,7 @@ api = Namespace('store', description='Store\'s operations')
 class StoreAvailableProducts(Resource):
     @api.response(200, 'Success')
     def get(self):
-        '''Get all available products from each store'''
+        """Get all available products from each store"""
         store_products_schema = StoreProductsSchema(many=True)
         stores_available_products = StoreService.get_available_products_per_store()
         result = store_products_schema.dump(stores_available_products)
@@ -20,15 +20,17 @@ class StoreAvailableProducts(Resource):
 
 
 @api.doc(params={'openedAt':
-                 {'description': 'Filter by those which are available today at certain time',
-                  'in': 'query', 'type': 'time(HH:MM)'}})
+                 {'description': 'Filter by those which are available'
+                  'today at certain time', 'in': 'query',
+                  'type': 'time(HH:MM)'}
+                 })
 @api.route('/')
 class StoreList(Resource):
 
     @api.response(200, 'Success')
     @api.response(400, 'Bad request')
     def get(self):
-        '''Get stores basic information'''
+        """Get stores basic information"""
         time_format = '%H:%M'
         opened_at = request.args.get('openedAt')
         if opened_at is not None:
@@ -54,9 +56,9 @@ class StoreProductsList(Resource):
     @api.response(200, 'Success')
     @api.response(404, 'Resource not found')
     def get(self, store_id):
-        '''Get available products on a specific store'''
+        """Get available products on a specific store"""
         store = StoreService.get_store(store_id)
-        if store == None:
+        if store is None:
             abort(404, 'Store not found')
         store_available_products = StoreService.get_store_available_products(
             store)

@@ -5,7 +5,8 @@ from app.service.store import StoreService
 from app.service.product import ProductService
 from app.service.voucher import VoucherService
 from app.schema import CartCreatedSchema, CartSchema
-from app.exceptions import NoStockException, ProductNotFoundInCart, VoucherNotValidException
+from app.exceptions import (
+    NoStockException, ProductNotFoundInCart, VoucherNotValidException)
 
 api = Namespace('cart', description='Cart\'s operations')
 
@@ -16,8 +17,8 @@ class StoreCart(Resource):
     @api.response(404, 'Resource not found')
     @api.response(201, 'Cart created')
     def post(self, store_id):
-        '''Creates a cart on the specified store'''
-        if StoreService.get_store(store_id) == None:
+        """Creates a cart on the specified store"""
+        if StoreService.get_store(store_id) is None:
             abort(404, 'Store not found')
         new_cart = CartService.create_store_cart(store_id)
         cart_created_schem = CartCreatedSchema()
@@ -32,12 +33,12 @@ class CartProduct(Resource):
     @api.response(200, 'Success')
     @api.response(404, 'Resource not found')
     def post(self, cart_id, product_id):
-        '''Adds one unit of the specified product to cart if it has stock'''
+        """Adds one unit of the specified product to cart if it has stock"""
         cart = CartService.get_cart(cart_id)
-        if cart == None:
+        if cart is None:
             abort(404, 'Cart not found')
         product = ProductService.get_product(product_id)
-        if product == None:
+        if product is None:
             abort(404, 'Product not found')
         try:
             cart = CartService.add_product_to_cart(cart, product)
@@ -50,12 +51,13 @@ class CartProduct(Resource):
     @api.response(200, 'Success')
     @api.response(404, 'Resource not found')
     def delete(self, cart_id, product_id):
-        '''Remove one unit of the specified product from the cart and returns it to the cart's store'''
+        """Remove one unit of the specified product from the cart and returns
+        it to the cart's store"""
         cart = CartService.get_cart(cart_id)
-        if cart == None:
+        if cart is None:
             abort(404, 'Cart not found')
         product = ProductService.get_product(product_id)
-        if product == None:
+        if product is None:
             abort(404, 'Product not found')
         try:
             cart = CartService.remove_product_from_cart(cart, product)
@@ -73,12 +75,13 @@ class CartVoucher(Resource):
     @api.response(200, 'Success')
     @api.response(404, 'Resource not found')
     def get(self, cart_id, voucher_id):
-        '''Check validity of a voucher, applies it to the cart if its valid and return original and discounted price'''
+        """Check validity of a voucher, applies it to the cart if its valid and
+        return original and discounted price"""
         cart = CartService.get_cart(cart_id)
-        if cart == None:
+        if cart is None:
             abort(404, 'Cart not found')
         voucher = VoucherService.get_voucher(voucher_id)
-        if voucher == None:
+        if voucher is None:
             abort(404, 'Voucher not found')
         try:
             original_price = CartService.get_price_from_cart(cart)

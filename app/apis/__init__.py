@@ -1,9 +1,9 @@
 from flask_restx import Api
 
-from .setup import api as setup_api
-from .store import api as store_api
-from .product import api as product_api
-from .cart import api as cart_api
+from app.apis.setup import api as setup_api
+from app.apis.store import api as store_api
+from app.apis.product import api as product_api
+from app.apis.cart import api as cart_api
 
 api = Api(
     title='Minimart API',
